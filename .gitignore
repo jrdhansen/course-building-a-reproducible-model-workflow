@@ -1,6 +1,10 @@
 # MacOS files
 *.DS_Store
 
+# W&B (Weights & Biases) files and dirs
+**/wandb/run**
+**/wandb/latest-run
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
