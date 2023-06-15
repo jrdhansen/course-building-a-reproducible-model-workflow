@@ -4,6 +4,7 @@
 # W&B (Weights & Biases) files and dirs
 **/wandb/run**
 **/wandb/latest-run
+**/artifacts/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
