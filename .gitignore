@@ -6,6 +6,9 @@
 **/wandb/latest-run
 **/artifacts/
 
+# MLflow files and dirs
+**/mlruns/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
