@@ -1,0 +1,12 @@
+# Python version required to run the project.
+python: "3.7.9"
+# Dependencies required to build packages. This field is optional.
+build_dependencies:
+  - pip==20.3.3
+  #- setuptools
+  #- wheel==0.37.1
+# Dependencies required to run the project.
+dependencies:
+  - requests==2.24.0
+  - mlflow=1.14.1
+  - hydra-core=1.0.6
