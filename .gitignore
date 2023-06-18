@@ -5,6 +5,8 @@
 **/wandb/run**
 **/wandb/latest-run
 **/artifacts/
+**/outputs/
+**.csv
 
 # MLflow files and dirs
 **/mlruns/
