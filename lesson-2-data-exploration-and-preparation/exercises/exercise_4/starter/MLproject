@@ -1,0 +1,9 @@
+# Create a MLproject file containing the main step. In this case, the step has no
+# parameters (you can skip completely the parameters section when defining main) and the command is simply jupyter notebook, which opens Jupyter.
+name: exercise4_EDA
+
+conda_env: conda.yml
+
+entry_points:
+  main:
+    command: "notebook"
