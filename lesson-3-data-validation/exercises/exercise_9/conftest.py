@@ -14,7 +14,6 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope="session")
 def data(request):
-
     reference_artifact = request.config.option.reference_artifact
 
     if reference_artifact is None:
@@ -34,11 +33,12 @@ def data(request):
     return sample1, sample2
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def ks_alpha(request):
+    # COMPLETE HERE: read the option ks_alpha from the command line,
+    # and return it as a float
     ks_alpha = request.config.option.ks_alpha
-
     if ks_alpha is None:
-        pytest.fail("--ks_threshold missing on command line")
+        pytest.fail("--ks_alpha missing on command line")
 
     return float(ks_alpha)
