@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import roc_auc_score, plot_confusion_matrix
+from sklearn.metrics import roc_auc_score  # , confusion_matrix, ConfusionMatrixDisplay
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler, FunctionTransformer
 import matplotlib.pyplot as plt
@@ -21,7 +21,6 @@ logger = logging.getLogger()
 
 
 def go(args):
-
     run = wandb.init(project="exercise_10", job_type="train")
 
     logger.info("Downloading and reading train artifact")
@@ -46,9 +45,8 @@ def go(args):
     pipe.fit(X_train, y_train)
 
     logger.info("Scoring")
-    score = roc_auc_score(
-        y_val, pipe.predict_proba(X_val), average="macro", multi_class="ovo"
-    )
+    y_pred = pipe.predict_proba(X_val)
+    score = roc_auc_score(y_val, y_pred, average="macro", multi_class="ovo")
 
     run.summary["AUC"] = score
 
@@ -74,22 +72,15 @@ def go(args):
 
     fig_feat_imp.tight_layout()
 
-    fig_cm, sub_cm = plt.subplots(figsize=(10, 10))
-    plot_confusion_matrix(
-        pipe,
-        X_val,
-        y_val,
-        ax=sub_cm,
-        normalize="true",
-        values_format=".1f",
-        xticks_rotation=90,
-    )
-    fig_cm.tight_layout()
+    # fig_cm, sub_cm = plt.subplots(figsize=(10, 10))
+    # cm = confusion_matrix(y_val, y_pred, labels=pipe.classes_)
+    # ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=pipe.classes_)
+    # fig_cm.tight_layout()
 
     run.log(
         {
-            "feature_importance": wandb.Image(fig_feat_imp),
-            "confusion_matrix": wandb.Image(fig_cm),
+            "feature_importance": wandb.Image(fig_feat_imp)
+            # "confusion_matrix": wandb.Image(fig_cm),
         }
     )
 
@@ -105,18 +96,20 @@ def get_inference_pipeline(args):
         SimpleImputer(strategy="constant", fill_value=0), OrdinalEncoder()
     )
     # Numerical preprocessing pipeline
-    numeric_features = sorted([
-        "danceability",
-        "energy",
-        "loudness",
-        "speechiness",
-        "acousticness",
-        "instrumentalness",
-        "liveness",
-        "valence",
-        "tempo",
-        "duration_ms",
-    ])
+    numeric_features = sorted(
+        [
+            "danceability",
+            "energy",
+            "loudness",
+            "speechiness",
+            "acousticness",
+            "instrumentalness",
+            "liveness",
+            "valence",
+            "tempo",
+            "duration_ms",
+        ]
+    )
     numeric_transformer = make_pipeline(
         SimpleImputer(strategy="median"), StandardScaler()
     )
