@@ -30,6 +30,7 @@ def go(args):
     logger.info("Downloading and reading train artifact")
     train_data_path = run.use_artifact(args.train_data).file()
     df = pd.read_csv(train_data_path, low_memory=False)
+    df.dropna(axis="rows", inplace=True)
 
     # Extract the target from the features
     logger.info("Extracting target from dataframe")
