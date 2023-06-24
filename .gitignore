@@ -10,6 +10,7 @@
 
 # MLflow files and dirs
 **/mlruns/
+**/multirun/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

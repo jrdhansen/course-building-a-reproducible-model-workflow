@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import roc_auc_score, plot_confusion_matrix
+from sklearn.metrics import roc_auc_score  # , plot_confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler, FunctionTransformer
 import matplotlib.pyplot as plt
@@ -23,7 +23,6 @@ logger = logging.getLogger()
 
 
 def go(args):
-
     run = wandb.init(job_type="train")
 
     logger.info("Downloading and reading train artifact")
@@ -76,28 +75,27 @@ def go(args):
 
     fig_feat_imp.tight_layout()
 
-    fig_cm, sub_cm = plt.subplots(figsize=(10, 10))
-    plot_confusion_matrix(
-        pipe,
-        X_val,
-        y_val,
-        ax=sub_cm,
-        normalize="true",
-        values_format=".1f",
-        xticks_rotation=90,
-    )
-    fig_cm.tight_layout()
+    # fig_cm, sub_cm = plt.subplots(figsize=(10, 10))
+    # plot_confusion_matrix(
+    #    pipe,
+    #    X_val,
+    #    y_val,
+    #    ax=sub_cm,
+    #    normalize="true",
+    #    values_format=".1f",
+    #    xticks_rotation=90,
+    # )
+    # fig_cm.tight_layout()
 
     run.log(
         {
-            "feature_importance": wandb.Image(fig_feat_imp),
-            "confusion_matrix": wandb.Image(fig_cm),
+            "feature_importance": wandb.Image(fig_feat_imp)
+            # "confusion_matrix": wandb.Image(fig_cm),
         }
     )
 
 
 def get_training_inference_pipeline(args):
-
     # Get the configuration for the pipeline
     with open(args.model_config) as fp:
         model_config = yaml.safe_load(fp)
@@ -127,7 +125,9 @@ def get_training_inference_pipeline(args):
     nlp_transformer = make_pipeline(
         SimpleImputer(strategy="constant", fill_value=""),
         reshape_to_1d,
-        TfidfVectorizer(binary=True, max_features=model_config["tfidf"]["max_features"]),
+        TfidfVectorizer(
+            binary=True, max_features=model_config["tfidf"]["max_features"]
+        ),
     )
     # Put the 3 tracks together into one pipeline using the ColumnTransformer
     # This also drops the columns that we are not explicitly transforming
