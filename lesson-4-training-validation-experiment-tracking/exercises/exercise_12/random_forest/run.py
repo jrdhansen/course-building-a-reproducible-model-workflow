@@ -12,7 +12,7 @@ from mlflow.models import infer_signature
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import roc_auc_score, plot_confusion_matrix
+from sklearn.metrics import roc_auc_score  # , plot_confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler, FunctionTransformer
 import matplotlib.pyplot as plt
@@ -25,7 +25,6 @@ logger = logging.getLogger()
 
 
 def go(args):
-
     run = wandb.init(job_type="train")
 
     logger.info("Downloading and reading train artifact")
@@ -60,39 +59,36 @@ def go(args):
 
     # Export if required
     if args.export_artifact != "null":
-
         export_model(run, pipe, X_val, pred, args.export_artifact)
 
     # Some useful plots
     fig_feat_imp = plot_feature_importance(pipe)
 
     fig_cm, sub_cm = plt.subplots(figsize=(10, 10))
-    plot_confusion_matrix(
-        pipe,
-        X_val,
-        y_val,
-        ax=sub_cm,
-        normalize="true",
-        values_format=".1f",
-        xticks_rotation=90,
-    )
-    fig_cm.tight_layout()
+    # plot_confusion_matrix(
+    #    pipe,
+    #    X_val,
+    #    y_val,
+    #    ax=sub_cm,
+    #    normalize="true",
+    #    values_format=".1f",
+    #    xticks_rotation=90,
+    # )
+    # fig_cm.tight_layout()
 
     run.log(
         {
-            "feature_importance": wandb.Image(fig_feat_imp),
-            "confusion_matrix": wandb.Image(fig_cm),
+            "feature_importance": wandb.Image(fig_feat_imp)
+            # "confusion_matrix": wandb.Image(fig_cm),
         }
     )
 
 
 def export_model(run, pipe, X_val, val_pred, export_artifact):
-
     # Infer the signature of the model
     signature = infer_signature(X_val, val_pred)
 
     with tempfile.TemporaryDirectory() as temp_dir:
-
         export_path = os.path.join(temp_dir, "model_export")
 
         mlflow.sklearn.save_model(
@@ -118,7 +114,6 @@ def export_model(run, pipe, X_val, val_pred, export_artifact):
 
 
 def plot_feature_importance(pipe):
-
     # We collect the feature importance for all non-nlp features first
     feat_names = np.array(
         pipe["preprocessor"].transformers[0][-1]
@@ -140,7 +135,6 @@ def plot_feature_importance(pipe):
 
 
 def get_training_inference_pipeline(args):
-
     # Get the configuration for the pipeline
     with open(args.model_config) as fp:
         model_config = yaml.safe_load(fp)
