@@ -1,6 +1,9 @@
 # Instructions
+See my [song_genre_classification](https://github.com/jrdhansen/song_genre_classification) repo.
+
 In this exercise we are going to bring everything together in a complete ML pipeline that
 produces a trained Random Forest model.
+
 
 # Preliminary step: create a repository and commit and push the starter kit
 1. Create a new GitHub repository called ``genre_classification`` in your GitHub account:
