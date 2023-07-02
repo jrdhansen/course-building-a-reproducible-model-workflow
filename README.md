@@ -1,2 +1,3 @@
 # ml-pipeline-nyc-rental-prices
-Editing readme to see if I can push local changes to remote.
+
+My notes and completed exercises for Udacity's [Building a Reproducible Model Workflow](https://www.udacity.com/course/building-a-reproducible-model-workflow--cd0581) course
